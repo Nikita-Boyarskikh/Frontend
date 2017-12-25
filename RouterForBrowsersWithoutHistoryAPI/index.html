@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>hash-router</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+      'use strict';
+      // не удалять эту строку
+      delete window.History;
+    </script>
+</head>
+<body>
+
+<script src="router.js"></script>
+
+<script>
+  'use strict';
+  /**
+   * ЗАДАНИЕ
+   * Написать реализацию роутера, которая может работать в браузерах без History API
+   *
+   * Подсказка: навигация по истории должна осуществляться с использованием
+   * хэшей (якорей) URL
+   *
+   * То есть роуты будут выглядеть, например, так:
+   *        https://example.com/#/route1
+   *        https://example.com/#/route2
+   *
+   * @see https://developer.mozilla.org/ru/docs/Web/API/WindowEventHandlers/onhashchange
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location
+   *
+   * Также необходимо напилить небольшую демку из пары страничек, которая будет
+   * работать на таком роутере
+   */
+
+  function animateNavbar () {
+    const navbar = document.getElementById('navbar');
+    const itemHeight = document.querySelector('#navbar a:not(.toggle)').clientHeight;
+    document.querySelector('#navbar a.toggle').addEventListener('click', () => {
+      navbar.classList.toggle('toggled');
+      if (navbar.classList.contains('toggled')) {
+        navbar.style.height = itemHeight * navbar.children.length + 'px';
+      } else {
+        navbar.style.height = itemHeight + 'px';
+      }
+    });
+  }
+
+  function main () {
+    const router = new Router();
+    router.init();
+    animateNavbar();
+    window.addEventListener('popstate', router.popstate.bind(router));
+  }
+
+  document.addEventListener('DOMContentLoaded', main);
+</script>
+
+<div id="navbar">
+    <a class="toggle">≡</a>
+    <a href="#/" class="current">Home</a>
+    <a href="#/page1.html">Page1</a>
+    <a href="#/page2.html">Page2</a>
+</div>
+<div id="application">
+    <div class="container">
+        <div id="loading">
+            <img src="loader.gif" class="centred">
+            <h3>Please, wait while application loads...</h3>
+        </div>
+        <div id="content"></div>
+    </div>
+</div>
+
+</body>
+</html>
